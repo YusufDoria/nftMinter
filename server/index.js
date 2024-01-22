@@ -38,7 +38,34 @@ app.post('/mint', async(req,res) => {
         res.json({ success: false })
     }
 })
-
+app.post("/createUser", async (req, res) => {
+    try {
+        const { address } = req.body;
+        const userRef = db.collection("users").doc(address)
+        userRef.set({
+            nfts: [],
+        })
+        res.json({ success: true });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false });
+    }
+});
+app.get("/getUser/:address", async (req, res) => {
+    try {
+        const { address } = req.params;
+        const userRef = db.collection("users").doc(address)
+        const user = await userRef.get()
+        if (!user.exists) {
+            res.json({ success: false })
+        } else {
+            res.json({ success: true, user: user.data() })
+        }
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false });
+    }
+});
 // app.get('*', (req, res) => {
 //     res.sendFile(path.join(__dirname + '/build/index.html'));
 //   });
