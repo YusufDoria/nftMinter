@@ -1,10 +1,14 @@
 import React from 'react';
 import logo from "./MintIt_logo.png";
 import { Link } from "react-router-dom";
-import { ConnectWallet } from "@thirdweb-dev/react";
+import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 
 
 function Navbar() {
+
+    const address = useAddress();
+
+    console.log(address);
     return (
         <nav className="navbar">
             <Link to={'/'}>
