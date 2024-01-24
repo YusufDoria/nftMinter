@@ -6,6 +6,7 @@ const { FieldValue } = require('firebase-admin/firestore');
 const bodyParser = require('body-parser');
 const path = require('path');
 require('dotenv').config();
+const sdk = require('api')('@opensea/v2.0#2cd9im1dlr9rw9li');
 const { ethers } = require('ethers');
 const { AlchemyProvider } = require('@ethersproject/providers');
 const erc20abi = require('./erc20abi.json')
@@ -66,6 +67,19 @@ app.get("/getUser/:address", async (req, res) => {
         res.json({ success: false });
     }
 });
+app.get("/getAllNFTs", async (req, res) => {
+    try {
+        sdk.auth('0f465c0014c4401499a5e45db88ac6a2');
+        sdk.server('https://testnets-api.opensea.io');
+        sdk.list_nfts_by_contract({ chain: 'mumbai', address: process.env.CONTRACT_ADDRESS })
+            .then((data) => {
+                res.json({ success: true, data: data })
+            })
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false });
+    }
+});  
 // app.get('*', (req, res) => {
 //     res.sendFile(path.join(__dirname + '/build/index.html'));
 //   });
